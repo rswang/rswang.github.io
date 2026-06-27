@@ -9,6 +9,7 @@ body {
 h1, h2, h3, h4, h5, h6 {
 	font-family: Lato;
 	text-transform: uppercase;
+	letter-spacing: 2px;
 }
 
 h1 {
