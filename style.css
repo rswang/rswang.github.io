@@ -67,17 +67,35 @@ ul#nav li.active {
 
 #profile-pic img {
 	width: 100%;
-	border-radius: 100%;
+	aspect-ratio: 1;
+	object-fit: cover;
+}
+
+@media (max-width: 991px) {
+	#profile-pic {
+		text-align: center;
+		margin-bottom: 25px;
+	}
+
+	#profile-pic img {
+		max-width: 300px;
+	}
 }
 
 ul#social-media {
 	padding: 20px 0;
+	text-align: left;
 }
 
 ul#social-media li a {
 	padding: 10px 10px;
 	margin: 5px;
 	color: #20afaf;
+}
+
+ul#social-media li:first-child a {
+	padding-left: 0;
+	margin-left: 0;
 }
 
 ul#social-media li a:hover {
