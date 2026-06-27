@@ -1,0 +1,38 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+
+const recipes = (await getCollection('recipes')).sort((a, b) => {
+  const da = a.data.date?.getTime() ?? 0;
+  const db = b.data.date?.getTime() ?? 0;
+  return db - da;
+});
+---
+
+<Base title="Baking — Rachel Wang" nav="baking">
+  <div class="row">
+    <div class="col-md-offset-1 col-md-10">
+      <h2 class="section-title">Baking</h2>
+      <div id="recipe-grid" class="recipe-grid">
+        {
+          recipes.length === 0 ? (
+            <p class="empty-note">No recipes yet — check back soon!</p>
+          ) : (
+            recipes.map((r) => (
+              <a class="recipe-tile" href={`/recipes/${r.id}`}>
+                <div
+                  class="tile-image"
+                  style={`background-image:url('${r.data.image}')`}
+                />
+                <div class="tile-caption">
+                  <span class="tile-title">{r.data.title}</span>
+                  {r.data.blurb && <span class="tile-blurb">{r.data.blurb}</span>}
+                </div>
+              </a>
+            ))
+          )
+        }
+      </div>
+    </div>
+  </div>
+</Base>

@@ -1,0 +1,103 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+
+export async function getStaticPaths() {
+  const recipes = await getCollection('recipes');
+  return recipes.map((recipe) => ({
+    params: { slug: recipe.id },
+    props: { recipe },
+  }));
+}
+
+const { recipe } = Astro.props;
+const { data } = recipe;
+
+const story = data.story ? (Array.isArray(data.story) ? data.story : [data.story]) : [];
+
+function formatDate(d: Date): string {
+  return d.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    timeZone: 'UTC',
+  });
+}
+
+// A line wrapped in em-dashes (— ... —) is a section header, not an item.
+function ingredientHeader(line: string): string | null {
+  const m = line.match(/^—\s*(.*?)\s*—$/);
+  return m ? m[1] : null;
+}
+---
+
+<Base title={data.title} nav="baking">
+  <div class="row">
+    <div class="col-md-offset-3 col-md-6">
+      <div id="recipe">
+        <a class="back-link" href="/baking">&larr; All bakes</a>
+        <h2 class="recipe-title">{data.title}</h2>
+        {data.date && <p class="recipe-date">{formatDate(data.date)}</p>}
+        <img class="recipe-photo" src={data.image} alt={data.title} />
+
+        {
+          story.length > 0 && (
+            <div class="recipe-story">
+              {story.map((p) => (
+                <p>{p}</p>
+              ))}
+            </div>
+          )
+        }
+
+        {
+          data.ingredients && data.ingredients.length > 0 && (
+            <>
+              <h3>Ingredients</h3>
+              <ul class="recipe-ingredients">
+                {data.ingredients.map((i) => {
+                  const header = ingredientHeader(i);
+                  return header ? (
+                    <li class="ingredient-group">{header}</li>
+                  ) : (
+                    <li>{i}</li>
+                  );
+                })}
+              </ul>
+            </>
+          )
+        }
+
+        {
+          data.steps && data.steps.length > 0 && (
+            <>
+              <h3>Method</h3>
+              <ol class="recipe-steps">
+                {data.steps.map((s) => (
+                  <li>{s}</li>
+                ))}
+              </ol>
+            </>
+          )
+        }
+
+        {
+          data.sources && data.sources.length > 0 && (
+            <div class="recipe-sources">
+              <h3>Adapted from</h3>
+              <ul>
+                {data.sources.map((s) => (
+                  <li>
+                    <a href={s.url} target="_blank" rel="noopener">
+                      {s.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )
+        }
+      </div>
+    </div>
+  </div>
+</Base>
