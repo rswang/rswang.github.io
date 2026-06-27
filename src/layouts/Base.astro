@@ -1,0 +1,54 @@
+---
+import '../styles/style.css';
+
+interface Props {
+  title: string;
+  /** Which nav item is active: "home" | "baking". Omit to hide the nav (home page). */
+  nav?: 'home' | 'baking';
+}
+
+const { title, nav } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.5/dist/css/bootstrap.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&family=Lato:wght@300;400;700;900"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css"
+    />
+    <title>{title}</title>
+  </head>
+  <body>
+    <div class="container">
+      <div id="header" class="row">
+        <h1><span class="bold">Rachel</span> <span class="light">Wang</span></h1>
+        {
+          nav && (
+            <ul id="nav" class="horizontal-list">
+              <li class={nav === 'home' ? 'active' : undefined}>
+                <a href="/">Home</a>
+              </li>
+              <li class={nav === 'baking' ? 'active' : undefined}>
+                <a href="/baking">Baking</a>
+              </li>
+              <li>Contact</li>
+            </ul>
+          )
+        }
+      </div>
+      <slot />
+    </div>
+  </body>
+</html>
