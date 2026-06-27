@@ -1,5 +1,21 @@
 ---
+import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
+
+const dateFmt = new Intl.DateTimeFormat('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+  timeZone: 'UTC',
+});
+
+const latestBakes = (await getCollection('recipes'))
+  .sort((a, b) => {
+    const da = a.data.date?.getTime() ?? 0;
+    const db = b.data.date?.getTime() ?? 0;
+    return db - da;
+  })
+  .slice(0, 6);
 ---
 
 <Base title="Rachel Wang">
@@ -38,4 +54,30 @@ import Base from '../layouts/Base.astro';
       </ul>
     </div>
   </div>
+
+  {
+    latestBakes.length > 0 && (
+      <div class="row">
+        <div class="col-md-offset-2 col-md-8">
+          <h2 class="oven-title">From the oven</h2>
+          <div class="oven-list">
+            {latestBakes.map((r) => (
+              <a class="oven-item" href={`/recipes/${r.id}`}>
+                <div
+                  class="oven-thumb"
+                  style={`background-image:url('${r.data.image}')`}
+                />
+                <div class="oven-meta">
+                  <span class="oven-name">{r.data.title}</span>
+                  {r.data.date && (
+                    <span class="oven-date">{dateFmt.format(r.data.date)}</span>
+                  )}
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
+    )
+  }
 </Base>
