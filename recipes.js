@@ -7,39 +7,83 @@
  *      - id:      unique slug, used in the URL (recipe.html?id=<id>). letters/dashes only.
  *      - title:   recipe name shown on the tile and recipe page.
  *      - image:   path to the photo.
+ *      - date:    date created, as "YYYY-MM-DD". Optional — shown under the title.
  *      - blurb:   short caption shown on the tile (optional).
  *      - story:   one string, or an array of strings (each becomes a paragraph). Optional.
  *      - ingredients: array of strings. Optional — omit for a notes-only entry.
  *      - steps:   array of strings. Optional — omit for a notes-only entry.
+ *      - sources: array of { label, url } links to original recipes. Optional.
  *
  * That's it — the gallery and recipe pages render themselves from this data.
  */
 const recipes = [
 	{
+		id: "pear-frangipane-tart",
+		title: "Pear Frangipane Tart",
+		image: "images/recipes/pear-frangipane-tart.jpg",
+		date: "2026-06-27",
+		blurb: "Almond cream + pears in a buttery crust",
+		story: [
+			"My mom's favorite dessert from our local French bakery. When it shut down, she asked me to learn how to make it, and it's become a staple ever since.",
+			"It comes together from three simple parts: a press-in French tart shell, an almond frangipane, and a can of pear halves fanned on top. Don't fuss over the pears — even a rough fan looks lovely once it bakes up golden."
+		],
+		ingredients: [
+			"— For the tart shell —",
+			"90g unsalted butter, cut into pieces",
+			"1 tbsp (15ml) vegetable oil",
+			"3 tbsp (45ml) water",
+			"1 tbsp (15g) sugar",
+			"⅛ tsp salt",
+			"150g flour",
+			"— For the frangipane —",
+			"85g unsalted butter, at room temperature",
+			"100g sugar",
+			"75g almond flour (ground almonds)",
+			"2 tsp (6g) flour",
+			"1 tsp (3g) cornstarch",
+			"1 large egg",
+			"¼ tsp vanilla extract",
+			"2 tsp dark rum (optional)",
+			"— To assemble —",
+			"1 can pear halves (about 410g), drained well"
+		],
+		steps: [
+			"Make the shell: Heat oven to 210°C (410°F). In an ovenproof bowl, combine the butter, oil, water, sugar, and salt. Bake about 15 minutes, until the butter is bubbling and just starting to brown at the edges.",
+			"Carefully remove the bowl (it may sputter). Tip in the flour and stir quickly until it comes together into a smooth dough that pulls away from the sides.",
+			"Spread the warm dough into a tart pan and let it cool a few minutes, then press evenly across the bottom and up the sides with a spoon or your fingers. Prick the base with a fork.",
+			"Bake the shell about 15 minutes, until lightly golden. Reduce the oven to 180°C (350°F).",
+			"Make the frangipane: Beat the butter until creamy, then beat in the sugar until smooth. Mix in the almond flour, then the flour and cornstarch, then the egg, vanilla, and rum. Beat just until combined — don't overwork once the egg is in.",
+			"Assemble: Spread the frangipane evenly into the baked shell. Thinly slice each pear half crosswise, keeping the shape, and fan the slices on top in a spoke pattern.",
+			"Bake at 180°C (350°F) for 50–60 minutes, until the frangipane is puffed, set, and deep golden. Cool before slicing."
+		],
+		sources: [
+			{ label: "Tart dough — David Lebovitz", url: "https://www.davidlebovitz.com/french-tart-dough-a-la-francaise/" },
+			{ label: "Frangipane — Smitten Kitchen", url: "https://smittenkitchen.com/2008/02/pear-and-almond-tart/" }
+		]
+	},
+	{
 		id: "banana-bread",
 		title: "Banana Bread",
 		image: "images/recipes/banana-bread.jpg",
-		blurb: "The classic, for very ripe bananas",
-		story: [
-			"This is the recipe I reach for whenever there are bananas going brown on the counter. The spottier the better — they make the loaf sweeter and more moist.",
-			"Write whatever you like here: the story behind the bake, tweaks you made, who you made it for."
-		],
+		date: "2026-06-27",
+		blurb: "A moist loaf for very ripe bananas",
 		ingredients: [
-			"3 ripe bananas, mashed",
-			"1/3 cup melted butter",
-			"3/4 cup sugar",
-			"1 egg, beaten",
-			"1 tsp vanilla",
+			"113g unsalted butter, softened",
+			"160g granulated sugar",
+			"2 large eggs",
+			"4 very ripe bananas, mashed",
+			"187g flour",
 			"1 tsp baking soda",
-			"Pinch of salt",
-			"1 1/2 cups flour"
+			"½ tsp salt"
 		],
 		steps: [
-			"Preheat oven to 175°C (350°F) and butter a loaf tin.",
-			"Mix the mashed bananas with the melted butter.",
-			"Stir in the sugar, egg, and vanilla, then the baking soda and salt.",
-			"Fold in the flour until just combined.",
-			"Pour into the tin and bake for 50–60 minutes, until a skewer comes out clean."
+			"Heat oven to 175°C (350°F). Grease a 9x5-inch (23x13cm) loaf pan.",
+			"Cream the butter and sugar until light. Beat in the eggs, then the mashed bananas.",
+			"In a separate bowl, whisk together the flour, baking soda, and salt. Stir into the banana mixture just until combined.",
+			"Pour into the pan and bake for 70 minutes, until a toothpick inserted in the center comes out clean. Cool before slicing."
+		],
+		sources: [
+			{ label: "Best Banana Bread — Food.com", url: "https://www.food.com/recipe/best-banana-bread-2886" }
 		]
 	}
 ];
@@ -55,6 +99,18 @@ function recipeById(id) {
 function asParagraphs(story) {
 	if (!story) return [];
 	return Array.isArray(story) ? story : [story];
+}
+
+// Turns "2026-06-27" into "June 27, 2026" without timezone surprises.
+function formatDate(iso) {
+	if (!iso) return "";
+	var parts = iso.split("-");
+	if (parts.length !== 3) return iso;
+	var months = ["January", "February", "March", "April", "May", "June",
+		"July", "August", "September", "October", "November", "December"];
+	var month = months[parseInt(parts[1], 10) - 1];
+	if (!month) return iso;
+	return month + " " + parseInt(parts[2], 10) + ", " + parts[0];
 }
 
 // Renders the tile grid into the element with id="recipe-grid".
@@ -100,8 +156,13 @@ function renderRecipePage() {
 
 	var html = '' +
 		'<a class="back-link" href="baking.html">&larr; All bakes</a>' +
-		'<h2 class="recipe-title">' + recipe.title + '</h2>' +
-		'<img class="recipe-photo" src="' + recipe.image + '" alt="' + recipe.title + '">';
+		'<h2 class="recipe-title">' + recipe.title + '</h2>';
+
+	if (recipe.date) {
+		html += '<p class="recipe-date">' + formatDate(recipe.date) + '</p>';
+	}
+
+	html += '<img class="recipe-photo" src="' + recipe.image + '" alt="' + recipe.title + '">';
 
 	var story = asParagraphs(recipe.story);
 	if (story.length) {
@@ -112,7 +173,13 @@ function renderRecipePage() {
 
 	if (recipe.ingredients && recipe.ingredients.length) {
 		html += '<h3>Ingredients</h3><ul class="recipe-ingredients">' +
-			recipe.ingredients.map(function (i) { return '<li>' + i + '</li>'; }).join("") +
+			recipe.ingredients.map(function (i) {
+				// A line wrapped in em-dashes (— ... —) is a section header, not an item.
+				var header = i.match(/^—\s*(.*?)\s*—$/);
+				return header
+					? '<li class="ingredient-group">' + header[1] + '</li>'
+					: '<li>' + i + '</li>';
+			}).join("") +
 			'</ul>';
 	}
 
@@ -120,6 +187,14 @@ function renderRecipePage() {
 		html += '<h3>Method</h3><ol class="recipe-steps">' +
 			recipe.steps.map(function (s) { return '<li>' + s + '</li>'; }).join("") +
 			'</ol>';
+	}
+
+	if (recipe.sources && recipe.sources.length) {
+		html += '<div class="recipe-sources"><h3>Adapted from</h3><ul>' +
+			recipe.sources.map(function (s) {
+				return '<li><a href="' + s.url + '" target="_blank" rel="noopener">' + s.label + '</a></li>';
+			}).join("") +
+			'</ul></div>';
 	}
 
 	mount.innerHTML = html;

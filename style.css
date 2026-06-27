@@ -155,6 +155,17 @@ ul#social-media li a:hover {
 
 .recipe-title {
 	margin-top: 5px;
+	margin-bottom: 2px;
+}
+
+.recipe-date {
+	font-family: Lato;
+	font-weight: 300;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+	font-size: 0.8em;
+	color: #999;
+	margin: 0 0 5px;
 }
 
 .recipe-photo {
@@ -169,4 +180,43 @@ ul#social-media li a:hover {
 .recipe-ingredients,
 .recipe-steps {
 	line-height: 1.7;
+}
+
+.recipe-ingredients {
+	list-style: none;
+	padding-left: 0;
+}
+
+.recipe-ingredients .ingredient-group {
+	list-style: none;
+	margin-top: 12px;
+	font-family: Lato;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+	font-size: 0.8em;
+	color: #20afaf;
+}
+
+.recipe-ingredients .ingredient-group:first-child {
+	margin-top: 0;
+}
+
+.recipe-sources {
+	margin-top: 30px;
+	font-family: Lato;
+	font-size: 0.9em;
+}
+
+.recipe-sources h3 {
+	font-size: 0.85em;
+	color: #999;
+}
+
+.recipe-sources a {
+	color: #20afaf;
+}
+
+.recipe-sources a:hover {
+	color: #80e8e8;
 }
