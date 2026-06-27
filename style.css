@@ -1,9 +1,13 @@
+body {
+	font-family: Inter, sans-serif;
+}
+
 #header {
 	text-align: center;
 }
 
 h1, h2, h3, h4, h5, h6 {
-	font-family: Lato;
+	font-family: Inter;
 	text-transform: uppercase;
 }
 
@@ -30,7 +34,7 @@ ul#nav li {
 	padding: 10px 50px;
 	margin: 5px;
 	background-color: #c1f4f4;
-	font-family: Lato;
+	font-family: Inter;
 	text-transform: uppercase;
 	letter-spacing: 1px;
 	color: #555;
