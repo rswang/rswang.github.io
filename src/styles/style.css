@@ -206,6 +206,11 @@ ul#social-media li a:hover {
 	line-height: 1.6;
 }
 
+#recipe h4 {
+	font-weight: 300;
+	color: #999;
+}
+
 .recipe-ingredients,
 .recipe-steps {
 	line-height: 1.7;
